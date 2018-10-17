@@ -128,8 +128,7 @@ For more information, see:
   }
 
   .container {
-    width: 80%;
-    max-width: 1200px;
+    width: 95%;
     margin: auto;
   }
 
@@ -300,11 +299,70 @@ For more information, see:
   }
 
   div.default-page {
-    min-width: 1200px;
   }
 
   .pocket {
     display: none;
+  }
+
+  .loading {
+	  display: none;
+    width: 362px;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 100px;
+    background: #efefef;
+    border: 3px solid grey;
+    position: fixed;
+    left: calc(50% - 181px);
+    top: calc(50% - 50px);
+  }
+  .loading > h2 {
+    vertical-align: middle;
+    line-height: 100px;
+  }
+  
+  #apps_container > ul {
+	  width: calc(33% - 100px);
+	  display: inline-grid;
+	  text-align: center;
+	  background: #efefef;
+	  border: 3px solid #4f4f4f;
+	  margin: 10px;
+	  padding: 10px;
+  }
+  
+  #apps_container > ul > h5  {
+	  text-align: center;
+    font-weight: bold;
+    margin-top: 5px;
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  #apps_container > ul > h5:hover  {
+	  text-decoration: underline;
+  }
+  
+  #apps_container > ul > li  {
+	  cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  #apps_container > ul > li:hover  {
+	  text-decoration: underline;
+  }
+
+  .permission-list {
+	  display: inline-grid;
+	  width: 24.5%;
+	  background: #efefef;
+	  margin: 5px;
+	  font-weight: bold;
+	  cursor: pointer;
   }
   .front-nav {
     font-size: 20px;
@@ -314,7 +372,7 @@ For more information, see:
   }
 
 </style>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 <div class="default-page">
   <div class="header">
     <h1 id="main-title" class="container">
@@ -323,127 +381,210 @@ For more information, see:
     <a class="front-nav" href="/">Main Page</a>
     <a class="front-nav" href="/categories">Categories & Timelines</a>
   </div>
+
+  <div class="container timeline-container" style="display: none;">
+    <div class="row toolbar-pf">
+      <div class="col-sm-12">
+        <form class="toolbar-pf-actions">
+          <div class="form-group">
+            <select class="selectpicker" id="timeline-selectpicker" data-live-search="true" multiple></select>
+          </div>
+          <div class="form-group">
+            <div class="dropdown pull-left">
+              <button class="btn btn-default dropdown-toggle" id="range-dropdown" data-toggle="dropdown" type="button">
+                <span data-bind="label">1 week</span>&nbsp;
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu zoom-filter" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">1 hour</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">1 day</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">1 week</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">1 month</a></li>
+              </ul>
+            </div>
+            <div class="dropdown pull-left">
+              <button class="btn btn-default dropdown-toggle" id="position-dropdown" data-toggle="dropdown" type="button">
+                <span data-bind="label">ending</span>&nbsp;
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu zoom-filter" role="menu" aria-labelledby="dropdownMenu2">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">centered on</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">starting</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">ending</a></li>
+              </ul>
+            </div>
+            <div class="input-group date" id="datepicker">
+              <input type="text" class="form-control bootstrap-datepicker"><span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-default" id="reset-button" type="button">Reset Zoom</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div id="pf-timeline"></div>
+    </div>
+    <br/>
+    <div id="legend"></div>
+  </div>
+
   <div class="main container clearfix" style="text-align: center;">
-    <button class="btn" onClick="hidePerms();">Show Apps Graph</button>
-    <button class="btn" onClick="hideApps();">Show Permission Graph</button>
-    <select id="dateSelect" onchange="dateChanged(event)">
-    </select>
-    <div id="apps_chart_div" style="width: 1000px !important; height: 700px !important; display: block; position: absolute;"></div>
-    <div id="perms_chart_div" style="width: 1000px !important; height: 700px !important; display: block; position: absolute;" ></div>
+    <div id="apps_container" style="width: 100%">
+    <h1 style="font-size: 60px; margin-bottom: 10px; margin-top: 20px;">App Categories</h1>
+    </div>
+    <div id="games_container" style="width: 100%">
+    
+    </div>
+    <div id="permission_container" style="width: 100%">
+    <h1 style="font-size: 60px; margin-bottom: 10px; margin-top: 20px;">Permission Lists</h1>
+    </div>
+    <div class="loading">
+      <h2>Loading...</h2>
+    </div>
   </div>
 </div>
 
+<script src="/custom/jquery-2.1.4.min.js"></script>
+<script src="/custom/bootstrap.min.js"></script>
+<script src="/custom/bootstrap-select.min.js"></script>
+<script src="/custom/bootstrap-datepicker.min.js"></script>
+<script src="/custom/d3.min.js"></script>
+<script src="/custom/c3.min.js"></script>
+<script src="/custom/timeline.js"></script>
+<script src="/custom/patternfly.min.js"></script>
+
+<!-- external file containing json object for data -->
+
+<script src="/custom/script.js"></script>
 <script type="text/javascript">
-  appBubble = <%- JSON.stringify(AppBubble) %>
-  permBubble = <%- JSON.stringify(permissionBubble) %>
-  datesArray = Object.keys(appBubble);
-
-  datesArray.forEach(function (a) {
-    var opt = document.createElement('option');
-    opt.value = a;
-    opt.textContent = a.split("_").join(" ");
-    document.getElementById('dateSelect').appendChild(opt);
-  });
-
-  google.charts.load('current', {
-    'packages': ['corechart']
-  });
-  google.charts.setOnLoadCallback(drawSeriesChart);
-
-  function appsProcess(date) {
-    var array = [
-      ['Name', 'No. of Permission Calls', 'No. of Permission Used By App']
-    ]
-    for (var package in appBubble[date].package) {
-      array.push([package, appBubble[date].package[package].count, appBubble[date].package[package].permissions.length])
-    }
-    return array;
-  }
-
-  function permsProcess(date) {
-    var array = [
-      ['Name', 'Total Permission Calls', 'Apps Using This Permission']
-    ];
-    for (var perms in permBubble[date].permissions) {
-      array.push([perms, permBubble[date].permissions[perms].count, permBubble[date].permissions[perms].apps.length]);
-    }
-    return array;
-  }
-
-  var appsOptions = {
-    title: 'Data Visualisation For App Using Different Permissions On - ' + datesArray[0].split("_").join(" "),
-    vAxis: {
-      title: 'No. of Permission Used By App'
-    },
-    hAxis: {
-      title: 'No. of Permission Calls'
-    },
-    bubble: {
-      textStyle: {
-        fontSize: 11
-      }
-    },
-    chartArea: {
-      width: "1000px",
-      height: "700px"
-    },
-  };
-
-  var permsOptions = {
-    title: 'Data Visualisation For Permissions Used By Different Apps On - ' + datesArray[0].split("_").join(" "),
-    vAxis: {
-      title: 'Apps Using This Permission'
-    },
-    hAxis: {
-      title: 'Total Permission Calls'
-    },
-    bubble: {
-      textStyle: {
-        fontSize: 11
-      }
-    },
-    chartArea: {
-      width: "1000px",
-      height: "700px"
-    },
-  };
-
-  function drawSeriesChart() {
-    var appsData = google.visualization.arrayToDataTable(appsProcess(datesArray[0]));
-    var permsData = google.visualization.arrayToDataTable(permsProcess(datesArray[0]));
-
-    var appschart = new google.visualization.BubbleChart(document.getElementById('apps_chart_div'));
-    appschart.draw(appsData, appsOptions);
-
-    var permschart = new google.visualization.BubbleChart(document.getElementById('perms_chart_div'));
-    permschart.draw(permsData, permsOptions);
-
-  }
-
-  function hideApps() {
-    document.getElementById('apps_chart_div').style.visibility = 'hidden';
-    document.getElementById('perms_chart_div').style.visibility = 'visible';
-  }
-
-  function hidePerms() {
-    document.getElementById('apps_chart_div').style.visibility = 'visible';
-    document.getElementById('perms_chart_div').style.visibility = 'hidden';;
-  }
-
-  function dateChanged(event) {
-    appsOptions.title = 'Data Visualisation For App Using Different Permissions On - ' + event.target.value.split("_").join(
-      " ");
-    permsOptions.title = 'Data Visualisation For Permissions Used By Different Apps On - ' + event.target.value.split(
-      "_").join(" ");
-
-    var appsData = google.visualization.arrayToDataTable(appsProcess(event.target.value));
-    var permsData = google.visualization.arrayToDataTable(permsProcess(event.target.value)); 
+  var appData = {};
+  var categories = {};
+  var totalData = 0;
+  document.querySelector(".loading").style.display = "block";
+  fetch("/package-names",{method: "get"}).then(function(response) {
+    return response.json();
+  }).then(function(res){
+    appData = res;
+    totalData = appData.packageList.length;
     
-    var appschart = new google.visualization.BubbleChart(document.getElementById('apps_chart_div'));
-    appschart.draw(appsData, appsOptions);
+    res.packageList.forEach(function(package){
+      fetch("/get-play?package=" + package,{method: "get"}).then(function(response) {
+        return response.text();
+      }).then(function(res){
+        if(res == "not found"){
+          categories[package] = {
+            name: package,
+            category: "Unknown",
+            type: "App"
+          }
+          if(totalData == Object.keys(categories).length){
+            document.querySelector(".loading").style.display = "none";
+          }
+          var apps_container = document.querySelector("#apps_container");
+          
+          var li = document.createElement("li");
+          li.dataset.package = package;
+          li.textContent = package;
+          li.addEventListener('click', function(){
+            loadJSON(this.dataset.package, "app");
+          });
+          if(!apps_container.querySelector("ul.Unknown")){
+            var h5 = document.createElement('h5');
+            h5.textContent = "Unknown";
+            h5.addEventListener('click', function(){
+            var appList = [];
+            this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
+            loadJSON(appList.join("||"), "category");
+            });
+            var ul = document.createElement("ul");
+            ul.className = "Unknown";
+            ul.appendChild(h5);
+            ul.appendChild(li);
+            apps_container.appendChild(ul);
 
-    var permschart = new google.visualization.BubbleChart(document.getElementById('perms_chart_div'));
-    permschart.draw(permsData, permsOptions);
-  }
+          } else {
+            apps_container.querySelector("ul.Unknown").appendChild(li);
+          }
 
+        } else {
+          var doc = document.createElement('div');
+          doc.innerHTML = res;        
+          var appName = doc.querySelector('[itemprop="name"]').textContent;
+          var appCat = doc.querySelector('[itemprop="genre"]').textContent.split(" ")[0];
+          var appType = doc.querySelector('[itemprop="genre"]').href.includes('GAME') ? "Game" : "App";
+          categories[package] = {
+            name: appName,
+            category: appCat,
+            type: appType
+          }
+          if(totalData == Object.keys(categories).length){
+            document.querySelector(".loading").style.display = "none";
+          }
+
+          var apps_container = document.querySelector("#apps_container");
+          var games_container = document.querySelector("#games_container");
+          
+          var li = document.createElement("li");
+          li.dataset.package = package;
+          li.textContent = appName;
+          li.addEventListener('click', function(){
+            loadJSON(this.dataset.package, "app");
+          });
+          if(appType == "App") {
+            
+            if(!apps_container.querySelector("ul." + appCat)){
+              var h5 = document.createElement('h5');
+              h5.textContent = appCat;
+              h5.addEventListener('click', function(){
+                var appList = [];
+                this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
+                loadJSON(appList.join("||"), "category");
+              });
+              var ul = document.createElement("ul");
+              ul.className = appCat;
+              ul.appendChild(h5);
+              ul.appendChild(li);
+              apps_container.appendChild(ul);
+            } else {
+              apps_container.querySelector("ul." + appCat).appendChild(li);
+            }
+
+          } else {
+
+            if(!games_container.querySelector("ul." + appCat)){
+              var h5 = document.createElement('h5');
+              h5.textContent = appCat;
+              h5.addEventListener('click', function(){
+                var appList = [];
+                this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
+                loadJSON(appList.join("||"), "category");
+              });
+              var ul = document.createElement("ul");
+              ul.className = appCat;
+              ul.appendChild(h5);
+              ul.appendChild(li);
+              games_container.appendChild(ul);
+            } else {
+              games_container.querySelector("ul." + appCat).appendChild(li);
+            }
+
+          }
+          
+        }
+        
+      });
+    });
+    res.permissionList.forEach(function(perm){
+      var permLi = document.createElement('li');
+      permLi.className = "permission-list list-inline";
+      permLi.textContent = perm;
+      permLi.addEventListener('click', function(){
+        loadJSON(perm, "permission");
+      });
+      document.querySelector("#permission_container").appendChild(permLi);
+    });
+  });
+  
 </script>

@@ -4,6 +4,7 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
+const axios = require('axios');
 
 module.exports = {
   addData: function (req, res) {
@@ -27,9 +28,18 @@ module.exports = {
       if (err) {
         return res.send(err);
       } else {
-        return res.json(data)
+        return res.json(data);
       }
     });
+  },
+  getPlay: function (req, res) {
+    axios.get('https://play.google.com/store/apps/details?id=' + req.query.package)
+      .then(response => {
+        res.send(response.data);
+      })
+      .catch(error => {
+        res.send("not found");
+      });
   },
   home: function (req, res) {
     Data.find().exec(function (err, data) {
@@ -108,6 +118,60 @@ module.exports = {
           AppBubble: AppBubble,
           permissionBubble: permissionBubble
         });
+      }
+    });
+  },
+  categoryPage: function(req, res){
+    return res.view("pages/categories");
+  },
+  appSingle: function(req, res) {
+    Data.find({ package_name: req.query.app }).exec(function (err, data) {
+      if (err) {
+        return res.send(err);
+      } else {
+        return res.json(data);
+      }
+    });
+  },
+  categoryData: function(req, res) {
+    Data.find({ package_name: req.body.apps.split("||") }).exec(function (err, data) {
+      if (err) {
+        return res.send(err);
+      } else {
+        return res.json(data);
+      }
+    });
+  },
+  permissionData: function(req, res) {
+    Data.find({ permission: req.body.permission }).exec(function (err, data) {
+      if (err) {
+        return res.send(err);
+      } else {
+        return res.json(data);
+      }
+    });
+  },
+  packageList: function(req,res){
+    Data.find().exec(function (err, data) {
+      if (err) {
+        return res.send(err);
+      } else {
+        var packageNames = [];
+        var permissionNames = [];
+
+        for(i = 0; i < data.length; i++){
+          
+          if(!packageNames.includes(data[i].package_name)){
+            packageNames.push(data[i].package_name);
+          }
+
+          if(!permissionNames.includes(data[i].permission)){
+            permissionNames.push(data[i].permission);
+          }
+
+        }
+
+        return res.json({packageList: packageNames, permissionList: permissionNames});
       }
     });
   }

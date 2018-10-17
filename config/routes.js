@@ -26,7 +26,14 @@ module.exports.routes = {
 
   'post /add-data': 'DataController.addData',
   'get /all-data': 'DataController.allData',
-  'get /': 'DataController.home'
+  'get /': 'DataController.home',
+  'get /get-play': 'DataController.getPlay',
+  'get /categories': 'DataController.categoryPage',
+  'get /package-names': 'DataController.packageList',
+  'get /app-single': 'DataController.appSingle',
+  'post /category-data': 'DataController.categoryData',
+  'post /permission-data': 'DataController.permissionData'
+
   /***************************************************************************
   *                                                                          *
   * More custom routes here...                                               *

@@ -6,15 +6,16 @@
   "keywords": [],
   "dependencies": {
     "async": "2.0.1",
+    "axios": "^0.18.0",
     "connect-redis": "3.2.0",
-    "grunt": "1.0.1",
-    "lodash": "3.10.1",
+    "grunt": "^1.0.3",
+    "lodash": "^4.17.11",
     "sails": "^1.0.0-41",
-    "sails-hook-grunt": "^2.0.0",
+    "sails-hook-grunt": "^3.1.0",
     "sails-hook-orm": "^2.0.0-16",
     "sails-hook-sockets": "^1.4.0",
     "sails-mysql": "^1.0.0",
-    "socket.io-redis": "4.0.0"
+    "socket.io-redis": "^5.2.0"
   },
   "devDependencies": {
     "eslint": "3.19.0"
