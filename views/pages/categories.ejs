@@ -383,6 +383,7 @@ For more information, see:
   </div>
 
   <div class="container timeline-container" style="display: none;">
+  <h3 class="graph_title" style="text-align:center; font-size: xx-large; font-weight: bold; margin: 20px;"></h3>
     <div class="row toolbar-pf">
       <div class="col-sm-12">
         <form class="toolbar-pf-actions">
@@ -436,10 +437,15 @@ For more information, see:
     </div>
     <div id="games_container" style="width: 100%">
     
+    <div id="device_container" style="width: 100%">
+    <h1 style="font-size: 60px; margin-bottom: 10px; margin-top: 20px;">Device List</h1>
+    </div>
+
     </div>
     <div id="permission_container" style="width: 100%">
-    <h1 style="font-size: 60px; margin-bottom: 10px; margin-top: 20px;">Permission Lists</h1>
+    <h1 style="font-size: 60px; margin-bottom: 10px; margin-top: 20px;">Permissions List</h1>
     </div>
+
     <div class="loading">
       <h2>Loading...</h2>
     </div>
@@ -463,13 +469,89 @@ For more information, see:
   var categories = {};
   var totalData = 0;
   document.querySelector(".loading").style.display = "block";
-  fetch("/package-names",{method: "get"}).then(function(response) {
+  if(window.location.search){
+   var url = "/package-names?deviceId=" + window.location.search.split("=")[1];
+  } else {
+    var url = "/package-names"
+  }
+  fetch(url,{method: "get"}).then(function(response) {
     return response.json();
   }).then(function(res){
     appData = res;
     totalData = appData.packageList.length;
-    
     res.packageList.forEach(function(package){
+
+      if(localStorage.getItem(package)){
+        var pkgObj = JSON.parse(localStorage.getItem(package));
+
+          var appName = pkgObj.name;
+          var appCat = pkgObj.category;
+          var appType = pkgObj.type;
+          
+          categories[package] = {
+            name: appName,
+            category: appCat,
+            type: appType
+          }
+          
+          if(totalData == Object.keys(categories).length){
+            document.querySelector(".loading").style.display = "none";
+          }
+
+          var apps_container = document.querySelector("#apps_container");
+          var games_container = document.querySelector("#games_container");
+          
+          var li = document.createElement("li");
+          li.dataset.package = package;
+          li.textContent = appName;
+          li.addEventListener('click', function(){
+            document.querySelector('.graph_title').textContent = "Application: " + this.textContent;
+            loadJSON(this.dataset.package, "app");
+          });
+          if(appType == "App") {
+            
+            if(!apps_container.querySelector("ul." + appCat)){
+              var h5 = document.createElement('h5');
+              h5.textContent = appCat;
+              h5.addEventListener('click', function(){
+                var appList = [];
+                document.querySelector('.graph_title').textContent = "Category: " + this.textContent;
+                this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
+                loadJSON(appList.join("||"), "category");
+              });
+              var ul = document.createElement("ul");
+              ul.className = appCat;
+              ul.appendChild(h5);
+              ul.appendChild(li);
+              apps_container.appendChild(ul);
+            } else {
+              apps_container.querySelector("ul." + appCat).appendChild(li);
+            }
+
+          } else {
+
+            if(!games_container.querySelector("ul." + appCat)){
+              var h5 = document.createElement('h5');
+              h5.textContent = appCat;
+              h5.addEventListener('click', function(){
+                var appList = [];
+                document.querySelector('.graph_title').textContent = "Category: " + this.textContent;
+                this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
+                loadJSON(appList.join("||"), "category");
+              });
+              var ul = document.createElement("ul");
+              ul.className = appCat;
+              ul.appendChild(h5);
+              ul.appendChild(li);
+              games_container.appendChild(ul);
+            } else {
+              games_container.querySelector("ul." + appCat).appendChild(li);
+            }
+
+          }
+
+      } else {
+
       fetch("/get-play?package=" + package,{method: "get"}).then(function(response) {
         return response.text();
       }).then(function(res){
@@ -479,6 +561,7 @@ For more information, see:
             category: "Unknown",
             type: "App"
           }
+          localStorage.setItem(package, JSON.stringify(categories[package]));
           if(totalData == Object.keys(categories).length){
             document.querySelector(".loading").style.display = "none";
           }
@@ -488,6 +571,7 @@ For more information, see:
           li.dataset.package = package;
           li.textContent = package;
           li.addEventListener('click', function(){
+            document.querySelector('.graph_title').textContent = "Application: " + this.textContent;
             loadJSON(this.dataset.package, "app");
           });
           if(!apps_container.querySelector("ul.Unknown")){
@@ -495,6 +579,7 @@ For more information, see:
             h5.textContent = "Unknown";
             h5.addEventListener('click', function(){
             var appList = [];
+            document.querySelector('.graph_title').textContent = "Category: " + this.textContent;            
             this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
             loadJSON(appList.join("||"), "category");
             });
@@ -519,6 +604,7 @@ For more information, see:
             category: appCat,
             type: appType
           }
+          localStorage.setItem(package, JSON.stringify(categories[package]));
           if(totalData == Object.keys(categories).length){
             document.querySelector(".loading").style.display = "none";
           }
@@ -530,6 +616,7 @@ For more information, see:
           li.dataset.package = package;
           li.textContent = appName;
           li.addEventListener('click', function(){
+            document.querySelector('.graph_title').textContent = "Application: " + this.textContent;
             loadJSON(this.dataset.package, "app");
           });
           if(appType == "App") {
@@ -539,6 +626,7 @@ For more information, see:
               h5.textContent = appCat;
               h5.addEventListener('click', function(){
                 var appList = [];
+                document.querySelector('.graph_title').textContent = "Category: " + this.textContent;
                 this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
                 loadJSON(appList.join("||"), "category");
               });
@@ -558,6 +646,7 @@ For more information, see:
               h5.textContent = appCat;
               h5.addEventListener('click', function(){
                 var appList = [];
+                document.querySelector('.graph_title').textContent = "Category: " + this.textContent;
                 this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
                 loadJSON(appList.join("||"), "category");
               });
@@ -575,16 +664,30 @@ For more information, see:
         }
         
       });
+
+    }
     });
     res.permissionList.forEach(function(perm){
       var permLi = document.createElement('li');
       permLi.className = "permission-list list-inline";
       permLi.textContent = perm;
       permLi.addEventListener('click', function(){
+        document.querySelector('.graph_title').textContent = "Permission: " + this.textContent;
         loadJSON(perm, "permission");
       });
       document.querySelector("#permission_container").appendChild(permLi);
     });
+
+    res.deviceList.forEach(function(device){
+      var devLi = document.createElement('li');
+      devLi.className = "permission-list list-inline";
+      devLi.textContent = device;
+      devLi.addEventListener('click', function(){
+       window.location.search = "?deviceId=" + device;
+      });
+      document.querySelector("#device_container").appendChild(devLi);
+    });
+
   });
   
 </script>

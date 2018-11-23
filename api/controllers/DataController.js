@@ -9,7 +9,13 @@ const axios = require('axios');
 module.exports = {
   addData: function (req, res) {
     var object = JSON.parse(req.body.data);
-    Data.create({
+    Data.findOrCreate({
+      'phone_id': object.PhoneID,
+      'package_name': object.Package,
+      'permission': object.Permission,
+      'timestamp': object.Timestamp,
+      "gps": object.GPS
+    }, {
       'phone_id': object.PhoneID,
       'package_name': object.Package,
       'permission': object.Permission,
@@ -125,54 +131,120 @@ module.exports = {
     return res.view("pages/categories");
   },
   appSingle: function(req, res) {
-    Data.find({ package_name: req.query.app }).exec(function (err, data) {
-      if (err) {
-        return res.send(err);
-      } else {
-        return res.json(data);
-      }
-    });
+    if(req.query.deviceId){
+      Data.find({ package_name: req.query.app, phone_id: req.query.deviceId }).exec(function (err, data) {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json(data);
+        }
+      });
+    } else {
+      Data.find({ package_name: req.query.app }).exec(function (err, data) {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json(data);
+        }
+      });
+    }
+
   },
   categoryData: function(req, res) {
-    Data.find({ package_name: req.body.apps.split("||") }).exec(function (err, data) {
-      if (err) {
-        return res.send(err);
-      } else {
-        return res.json(data);
-      }
-    });
+    if(req.body.deviceId){
+      Data.find({ package_name: req.body.apps.split("||"), phone_id: req.body.deviceId }).exec(function (err, data) {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json(data);
+        }
+      });
+    } else {
+      Data.find({ package_name: req.body.apps.split("||") }).exec(function (err, data) {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json(data);
+        }
+      });
+    }
+    
   },
   permissionData: function(req, res) {
-    Data.find({ permission: req.body.permission }).exec(function (err, data) {
-      if (err) {
-        return res.send(err);
-      } else {
-        return res.json(data);
-      }
-    });
+    if(req.body.deviceId){
+      Data.find({ permission: req.body.permission, phone_id: req.body.deviceId }).exec(function (err, data) {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json(data);
+        }
+      });
+    } else {
+      Data.find({ permission: req.body.permission }).exec(function (err, data) {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json(data);
+        }
+      });
+    }
+    
   },
   packageList: function(req,res){
-    Data.find().exec(function (err, data) {
-      if (err) {
-        return res.send(err);
-      } else {
-        var packageNames = [];
-        var permissionNames = [];
-
-        for(i = 0; i < data.length; i++){
-          
-          if(!packageNames.includes(data[i].package_name)){
-            packageNames.push(data[i].package_name);
+    if(req.query.deviceId){
+      Data.find({phone_id: req.query.deviceId}).exec(function (err, data) {
+        if (err) {
+          return res.send(err);
+        } else {
+          var packageNames = [];
+          var permissionNames = [];
+          var phoneIds = [];
+          for(i = 0; i < data.length; i++){
+            
+            if(!packageNames.includes(data[i].package_name)){
+              packageNames.push(data[i].package_name);
+            }
+  
+            if(!permissionNames.includes(data[i].permission)){
+              permissionNames.push(data[i].permission);
+            }
+  
+            if(!phoneIds.includes(data[i].phone_id)){
+              phoneIds.push(data[i].phone_id);
+            }
+  
           }
-
-          if(!permissionNames.includes(data[i].permission)){
-            permissionNames.push(data[i].permission);
-          }
-
+  
+          return res.json({packageList: packageNames, permissionList: permissionNames, deviceList: phoneIds});
         }
-
-        return res.json({packageList: packageNames, permissionList: permissionNames});
-      }
-    });
+      });
+    } else {
+      Data.find().exec(function (err, data) {
+        if (err) {
+          return res.send(err);
+        } else {
+          var packageNames = [];
+          var permissionNames = [];
+          var phoneIds = [];
+          for(i = 0; i < data.length; i++){
+            
+            if(!packageNames.includes(data[i].package_name)){
+              packageNames.push(data[i].package_name);
+            }
+  
+            if(!permissionNames.includes(data[i].permission)){
+              permissionNames.push(data[i].permission);
+            }
+  
+            if(!phoneIds.includes(data[i].phone_id)){
+              phoneIds.push(data[i].phone_id);
+            }
+  
+          }
+  
+          return res.json({packageList: packageNames, permissionList: permissionNames, deviceList: phoneIds});
+        }
+      }); 
+    }
   }
 };

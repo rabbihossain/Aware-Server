@@ -1,4 +1,6 @@
-
+var TLDates;
+var TLStart;
+var TLEnd;
 $(document).on('click', '.drop', function () {$(this).popover('show'); });
 
 $(document).on('click', '.grid', function () {$('[data-toggle="popover"]').popover('hide');});
@@ -14,40 +16,17 @@ const ONE_HOUR = 60 * 60 * 1000,
       ONE_MONTH = 30 * ONE_DAY,
       SIX_MONTHS = 6 * ONE_MONTH;
 
-var timeline = d3.chart.timeline()
-  .end(today)
-  .start(today - ONE_WEEK)
-  .minScale(ONE_WEEK / ONE_MONTH)
-  .maxScale(ONE_WEEK / ONE_HOUR)
-  .eventGrouping(1800000)
-  .width(window.innerWidth - 200)
-  .padding({top: 50, bottom: 50, left: 200, right: 50})
-  .eventClick(function(el) {
-    var table = '<table class="table table-striped table-bordered">';
-    if(el.hasOwnProperty("events")) {
-      table = table + '<thead>This is a group of ' + el.events.length + ' events starting on '+ el.date + '</thead><tbody>';
-      table = table + '<tr><th>Date</th><th>Event</th><th>Details</th></tr>';
-      for (var i = 0; i < el.events.length; i++) {
-        table = table + '<tr><td>' + el.events[i].date + ' </td> ';
-        for (var j in el.events[i].details) {
-          table = table +'<td> ' + el.events[i].details[j] + ' </td> ';
-        }
-        table = table + '</tr>';
-      }
-      table = table + '</tbody>';
-    } else {
-      table = table + 'Date: ' + el.date + '<br>';
-      for (i in el.details) {
-        table = table + i.charAt(0).toUpperCase() + i.slice(1) + ': ' + el.details[i] + '<br>';
-      }
-    }
-    $('#legend').html(table);
-});
+
 
 function loadJSON(name, type) {
   json = [];
   if(type == "app"){
-    fetch("/app-single?app=" + name,{method: "get"}).then(function(response) {
+    if(window.location.search){
+      var url = "/app-single?app=" + name + "&deviceId=" + window.location.search.split("=")[1];
+    } else {
+      var url = "/app-single?app=" + name
+    }
+    fetch(url,{method: "get"}).then(function(response) {
       return response.json();
     }).then(function(res){ 
       res.forEach(function(each){
@@ -63,6 +42,10 @@ function loadJSON(name, type) {
   } else if (type == "category"){
     var form = new FormData();
       form.append("apps", name);
+      if(window.location.search){
+        var deviceId = window.location.search.split("=")[1];
+        form.append("deviceId", deviceId);
+      }
 
     var settings = {
       "crossDomain": true,
@@ -92,6 +75,10 @@ function loadJSON(name, type) {
   } else {
     var form = new FormData();
       form.append("permission", name);
+      if(window.location.search){
+        var deviceId = window.location.search.split("=")[1];
+        form.append("deviceId", deviceId);
+      }
 
     var settings = {
       "crossDomain": true,
@@ -123,6 +110,41 @@ function loadJSON(name, type) {
 
 
 function loadTimeLine(){
+
+  TLDates = json.map(a => a.data.map(a => a.date)).join().split(",").map(a => Date.parse(a)).sort().map(a => new Date(a));
+  TLStart = TLDates[0];
+  TLEnd = TLDates[TLDates.length - 1];
+
+  timeline = d3.chart.timeline()
+  .end(TLEnd)
+  .start(TLStart)
+  .minScale(ONE_WEEK / ONE_MONTH)
+  .maxScale(ONE_WEEK / ONE_HOUR)
+  .eventGrouping(1800000)
+  .width(window.innerWidth - 200)
+  .padding({top: 50, bottom: 50, left: 200, right: 50})
+  .eventClick(function(el) {
+    var table = '<table class="table table-striped table-bordered">';
+    if(el.hasOwnProperty("events")) {
+      table = table + '<thead>This is a group of ' + el.events.length + ' events starting on '+ el.date + '</thead><tbody>';
+      table = table + '<tr><th>Date</th><th>Event</th><th>Details</th></tr>';
+      for (var i = 0; i < el.events.length; i++) {
+        table = table + '<tr><td>' + el.events[i].date + ' </td> ';
+        for (var j in el.events[i].details) {
+          table = table +'<td> ' + el.events[i].details[j] + ' </td> ';
+        }
+        table = table + '</tr>';
+      }
+      table = table + '</tbody>';
+    } else {
+      table = table + 'Date: ' + el.date + '<br>';
+      for (i in el.details) {
+        table = table + i.charAt(0).toUpperCase() + i.slice(1) + ': ' + el.details[i] + '<br>';
+      }
+    }
+    $('#legend').html(table);
+});
+
   document.querySelector("#pf-timeline").innerHTML = "";
   document.querySelector("#timeline-selectpicker").innerHTML = "";
   document.querySelector("#legend").innerHTML = "";
