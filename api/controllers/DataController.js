@@ -235,18 +235,22 @@ module.exports = {
       if(err) {
         return res.send(err);
       } else {
-        data.forEach(function(app) {
-          Data.find({ package_name: app.package_name}).exec(async function(err, data){
-            var PermissionsArr = [];
-            var points = 0;
-            data.forEach(function(perm) {
-              if(!PermissionsArr.includes(perm.permission)){
-                PermissionsArr.push(perm.permission);
-                points = points + permissionPoints[perm.permission];
-              }
-            });
-            await Package.updateOne({ package_name: app.package_name }).set({ permissions: PermissionsArr.join(","), points: points });
+
+        data.forEach(async function(app) {
+          var SQL = "SELECT DISTINCT permission FROM data WHERE package_name='" + app.package_name + "'";
+          var rawdata = await sails.sendNativeQuery(SQL);
+             
+          var PermissionsArr = [];
+          var points = 0;
+          
+          rawdata["rows"].forEach(function(perm) {
+            if(!PermissionsArr.includes(perm.permission)){
+              PermissionsArr.push(perm.permission);
+              points = points + permissionPoints[perm.permission];
+            }
           });
+          await Package.updateOne({ package_name: app.package_name }).set({ permissions: PermissionsArr.join(","), points: points });
+          
         });
         return res.send(data);
       }
