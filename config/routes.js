@@ -32,7 +32,9 @@ module.exports.routes = {
   'get /package-names': 'DataController.packageList',
   'get /app-single': 'DataController.appSingle',
   'post /category-data': 'DataController.categoryData',
-  'post /permission-data': 'DataController.permissionData'
+  'post /permission-data': 'DataController.permissionData',
+  'get /sync-permission-data': 'DataController.syncPermissionData',
+  'get /app-store': 'DataController.appStore'
 
   /***************************************************************************
   *                                                                          *

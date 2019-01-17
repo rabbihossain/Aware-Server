@@ -5,7 +5,42 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 const axios = require('axios');
-
+const permissionPoints = {
+  "RUN_IN_BACKGROUND" : 1,
+  "WRITE_EXTERNAL_STORAGE": 2,
+  "READ_EXTERNAL_STORAGE": 2,
+  "READ_CALENDAR": 1,
+  "OP_READ_PHONE_STATE": 1,
+  "READ_CONTACTS": 3,
+  "GET_ACCOUNTS": 1,
+  "FINE_LOCATION": 2, 
+  "WRITE_SETTINGS": 1,
+  "MONITOR_LOCATION": 3,
+  "POST_NOTIFICATION": 1,
+  "VIBRATE": 0,
+  "READ_CLIPBOARD": 3,
+  "WRITE_SMS" : 1,
+  "COARSE_LOCATION": 2,
+  "WIFI_SCAN": 1,
+  "MONITOR_HIGH_POWER_LOCATION": 3,
+  "RECORD_AUDIO": 3,
+  "TAKE_AUDIO_FOCUS": 3,
+  "READ_CALL_LOG": 3,
+  "MUTE_MICROPHONE": 3,
+  "READ_SMS": 3,
+  "WRITE_CALENDAR": 1,
+  "RECEIVE_SMS": 2,
+  "ADD_VOICEMAIL": 1,
+  "WRITE_CALL_LOG": 2,
+  "CALL_PHONE": 2,
+  "PROCESS_OUTGOING_CALLS": 2,
+  "SYSTEM_ALERT_WINDOW": 1,
+  "CAMERA": 3,
+  "AUDIO_MEDIA_VOLUME": 1,
+  "USE_FINGERPRINT": 3,
+  "TURN_ON_SCREEN": 1,
+  "WAKE_LOCK": 1
+}
 module.exports = {
   addData: function (req, res) {
     var object = JSON.parse(req.body.data);
@@ -39,94 +74,71 @@ module.exports = {
     });
   },
   getPlay: function (req, res) {
-    axios.get('https://play.google.com/store/apps/details?id=' + req.query.package)
-      .then(response => {
-        res.send(response.data);
-      })
-      .catch(error => {
-        res.send("not found");
-      });
-  },
-  home: function (req, res) {
-    Data.find().exec(function (err, data) {
+      Package.findOne({package_name: req.query.package}).exec(function (err, data) {
       if (err) {
+        console.log(err);
         return res.send(err);
       } else {
-        var permissionBubble = {};
-        data.forEach(function (each) {
-          dateString = new Date(each.timestamp).toDateString().split(" ").join("_");
-          if (permissionBubble[dateString]) {
-            if (permissionBubble[dateString].permissions) {
-              if (permissionBubble[dateString].permissions[each.permission]) {
-                if (!permissionBubble[dateString].permissions[each.permission].apps.includes(each.package_name)) {
-                  permissionBubble[dateString].permissions[each.permission].apps.push(each.package_name);
-                }
-                permissionBubble[dateString].permissions[each.permission].count = (permissionBubble[dateString].permissions[each.permission].count + 1);
+        if(data) {
+          return res.json(data);
+        } else {
+          axios({
+            method:'get',
+            url: "https://api.appmonsta.com/v1/stores/android/details/" + req.query.package + ".json?country=US",
+            auth: {
+            username: '649ec7a80d107b33364efd2b36d9cc132725c8d8',
+            password: 'X'
+            },
+          })
+          .then(response => {
+            Package.findOrCreate({
+              package_name: req.query.package,
+            },{
+              app_name: response.data.app_name,
+              package_name: req.query.package,
+              app_genre: response.data.genres[0].split(" ")[0],
+              app_type: response.data.app_type,
+              app_icon: response.data.icon_url,
+            }).exec(function(err, data) {
+              if(err){
+                console.log(err);
               } else {
-                permissionBubble[dateString].permissions[each.permission] = {};
-                permissionBubble[dateString].permissions[each.permission].apps = [];
-                permissionBubble[dateString].permissions[each.permission].apps.push(each.package_name);
-                permissionBubble[dateString].permissions[each.permission].count = 1;
+                res.json(data);
               }
-            } else {
-              permissionBubble[dateString].permissions = {};
-              permissionBubble[dateString].permissions[each.permission] = {};
-              permissionBubble[dateString].permissions[each.permission].apps = [];
-              permissionBubble[dateString].permissions[each.permission].apps.push(each.package_name);
-              permissionBubble[dateString].permissions[each.permission].count = 1;
+            });
+          })
+          .catch(error => {
+            sails.log(error);
+            res.send("not found");
+          });
+        }
+      }
+    });
+  },
+  home: function (req, res) {
+    res.redirect('/categories');
+  },
 
-            }
-          } else {
-            permissionBubble[dateString] = {};
-            permissionBubble[dateString].permissions = {};
-            permissionBubble[dateString].permissions[each.permission] = {};
-            permissionBubble[dateString].permissions[each.permission].apps = [];
-            permissionBubble[dateString].permissions[each.permission].apps.push(each.package_name);
-            permissionBubble[dateString].permissions[each.permission].count = 1;
+  appStore: function(req,res){
+
+    Package.find().exec(function(err, data){
+      if(err) {
+        res.send(err);
+      } else {
+        var categories = [];
+        data.forEach(function(app){
+          if(!categories.includes(app.app_genre)){
+            categories.push(app.app_genre);
           }
         });
-
-        var AppBubble = {};
-        data.forEach(function (each) {
-          dateString = new Date(each.timestamp).toDateString().split(" ").join("_");
-          if (AppBubble[dateString]) {
-            if (AppBubble[dateString].package) {
-              if (AppBubble[dateString].package[each.package_name]) {
-                if (!AppBubble[dateString].package[each.package_name].permissions.includes(each.permission)) {
-                  AppBubble[dateString].package[each.package_name].permissions.push(each.permission);
-                }
-                AppBubble[dateString].package[each.package_name].count = (AppBubble[dateString].package[each.package_name].count + 1);
-              } else {
-                AppBubble[dateString].package[each.package_name] = {};
-                AppBubble[dateString].package[each.package_name].permissions = [];
-                AppBubble[dateString].package[each.package_name].permissions.push(each.permission);
-                AppBubble[dateString].package[each.package_name].count = 1;
-              }
-            } else {
-              AppBubble[dateString].package = {};
-              AppBubble[dateString].package[each.package_name] = {};
-              AppBubble[dateString].package[each.package_name].permissions = [];
-              AppBubble[dateString].package[each.package_name].permissions.push(each.permission);
-              AppBubble[dateString].package[each.package_name].count = 1;
-
-            }
-          } else {
-            AppBubble[dateString] = {};
-            AppBubble[dateString].package = {};
-            AppBubble[dateString].package[each.package_name] = {};
-            AppBubble[dateString].package[each.package_name].permissions = [];
-            AppBubble[dateString].package[each.package_name].permissions.push(each.permission);
-            AppBubble[dateString].package[each.package_name].count = 1;
-          }
-        });
-
-        return res.view("pages/homepage", {
-          AppBubble: AppBubble,
-          permissionBubble: permissionBubble
+        return res.view("pages/appstore", {
+          categories: categories,
+          appData: data
         });
       }
     });
   },
+
   categoryPage: function(req, res){
     return res.view("pages/categories");
   },
@@ -190,61 +202,54 @@ module.exports = {
     }
     
   },
-  packageList: function(req,res){
+  packageList: async function(req,res){
     if(req.query.deviceId){
-      Data.find({phone_id: req.query.deviceId}).exec(function (err, data) {
-        if (err) {
-          return res.send(err);
-        } else {
-          var packageNames = [];
-          var permissionNames = [];
-          var phoneIds = [];
-          for(i = 0; i < data.length; i++){
-            
-            if(!packageNames.includes(data[i].package_name)){
-              packageNames.push(data[i].package_name);
-            }
-  
-            if(!permissionNames.includes(data[i].permission)){
-              permissionNames.push(data[i].permission);
-            }
-  
-            if(!phoneIds.includes(data[i].phone_id)){
-              phoneIds.push(data[i].phone_id);
-            }
-  
-          }
-  
-          return res.json({packageList: packageNames, permissionList: permissionNames, deviceList: phoneIds});
-        }
-      });
+      var SQL = 'SELECT DISTINCT package_name, permission, phone_id FROM data WHERE phone_id=' + req.query.deviceId;    
     } else {
-      Data.find().exec(function (err, data) {
-        if (err) {
-          return res.send(err);
-        } else {
-          var packageNames = [];
-          var permissionNames = [];
-          var phoneIds = [];
-          for(i = 0; i < data.length; i++){
-            
-            if(!packageNames.includes(data[i].package_name)){
-              packageNames.push(data[i].package_name);
-            }
-  
-            if(!permissionNames.includes(data[i].permission)){
-              permissionNames.push(data[i].permission);
-            }
-  
-            if(!phoneIds.includes(data[i].phone_id)){
-              phoneIds.push(data[i].phone_id);
-            }
-  
-          }
-  
-          return res.json({packageList: packageNames, permissionList: permissionNames, deviceList: phoneIds});
-        }
-      }); 
+      var SQL = 'SELECT DISTINCT package_name, permission, phone_id FROM data';      
     }
+    var rawData = await sails.sendNativeQuery(SQL);
+    var data = rawData["rows"];
+    sails.log("Data Length -" + data.length);
+    var packageNames = [];
+    var permissionNames = [];
+    var phoneIds = [];
+    for(i = 0; i < data.length; i++){
+      
+      if(!packageNames.includes(data[i].package_name)){
+        packageNames.push(data[i].package_name);
+      }
+      if(!permissionNames.includes(data[i].permission)){
+        permissionNames.push(data[i].permission);
+      }
+      if(!phoneIds.includes(data[i].phone_id)){
+        phoneIds.push(data[i].phone_id);
+      }  
+      
+    }
+    return res.json({packageList: packageNames, permissionList: permissionNames, deviceList: phoneIds}); 
+ 
+  },
+  syncPermissionData: function(req, res){
+    Package.find().exec(function(err, data) {
+      if(err) {
+        return res.send(err);
+      } else {
+        data.forEach(function(app) {
+          Data.find({ package_name: app.package_name}).exec(async function(err, data){
+            var PermissionsArr = [];
+            var points = 0;
+            data.forEach(function(perm) {
+              if(!PermissionsArr.includes(perm.permission)){
+                PermissionsArr.push(perm.permission);
+                points = points + permissionPoints[perm.permission];
+              }
+            });
+            await Package.updateOne({ package_name: app.package_name }).set({ permissions: PermissionsArr.join(","), points: points });
+          });
+        });
+        return res.send(data);
+      }
+    });
   }
 };

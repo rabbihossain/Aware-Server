@@ -128,7 +128,8 @@ For more information, see:
   }
 
   .container {
-    width: 95%;
+    width: 80%;
+    max-width: 1200px;
     margin: auto;
   }
 
@@ -299,70 +300,11 @@ For more information, see:
   }
 
   div.default-page {
+    min-width: 1200px;
   }
 
   .pocket {
     display: none;
-  }
-
-  .loading {
-	  display: none;
-    width: 362px;
-    height: 100px;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 100px;
-    background: #efefef;
-    border: 3px solid grey;
-    position: fixed;
-    left: calc(50% - 181px);
-    top: calc(50% - 50px);
-  }
-  .loading > h2 {
-    vertical-align: middle;
-    line-height: 100px;
-  }
-  
-  #apps_container > ul {
-	  width: calc(33% - 100px);
-	  display: inline-grid;
-	  text-align: center;
-	  background: #efefef;
-	  border: 3px solid #4f4f4f;
-	  margin: 10px;
-	  padding: 10px;
-  }
-  
-  #apps_container > ul > h5  {
-	  text-align: center;
-    font-weight: bold;
-    margin-top: 5px;
-    font-size: 30px;
-    cursor: pointer;
-  }
-
-  #apps_container > ul > h5:hover  {
-	  text-decoration: underline;
-  }
-  
-  #apps_container > ul > li  {
-	  cursor: pointer;
-    text-align: center;
-    font-weight: bold;
-    margin-top: 5px;
-  }
-
-  #apps_container > ul > li:hover  {
-	  text-decoration: underline;
-  }
-
-  .permission-list {
-	  display: inline-grid;
-	  width: 24.5%;
-	  background: #efefef;
-	  margin: 5px;
-	  font-weight: bold;
-	  cursor: pointer;
   }
   .front-nav {
     font-size: 20px;
@@ -371,8 +313,129 @@ For more information, see:
     font-weight: bold;
   }
 
-</style>
+  .cat-sidebar {
+    display: inline;
+    float: left;
+    width: 20%;
+    text-align: center;
+}
 
+.app-listings {
+    width: 78%;
+    margin-left: 1%;
+    display: inline;
+    float: left;
+    text-align: center;
+}
+.app-single {
+    width: 32%;
+    overflow: hidden;
+    float: left;
+    display: inline;
+    margin-left: 1%;
+    background: #efefef;
+    margin-bottom: 5px;
+    min-height: 650px; 
+}
+.app-single > img {
+    width: 100px;
+    margin: 5px;
+    display: block;
+}
+
+.app-single > h4 {
+    font-weight: bold;
+    text-align: left;
+    margin: 5px;
+    display: block;
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+
+.app-single > span {
+    text-align: left;
+    margin: 5px;
+    display: block;
+}
+
+
+.styledmeter {
+    width: 80%;
+    height: 12px;
+    background: #f3f5f7;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2) inset;
+    border-radius: 3px;
+    display: inline;
+    float: left;
+    margin: 5px;
+}
+
+/* WebKit */
+.styledmeter::-webkit-meter-bar {
+  background: #f3f5f7;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2) inset;
+  border-radius: 3px;
+}
+
+.styledmeter::-webkit-meter-optimum-value,
+.styledmeter::-webkit-meter-suboptimum-value,
+.styledmeter::-webkit-meter-even-less-good-value {
+  border-radius: 3px;
+}
+
+.styledmeter::-webkit-meter-optimum-value {
+  background: red;
+}
+
+.styledmeter::-webkit-meter-suboptimum-value {
+  background: yellow;
+}
+
+.styledmeter::-webkit-meter-even-less-good-value  {
+  background: green;
+}
+
+
+/* Firefox */
+.styledmeter::-moz-meter-bar {
+  border-radius: 3px;
+}
+
+.styledmeter:-moz-meter-optimum::-moz-meter-bar {
+  background: red;
+}
+
+.styledmeter:-moz-meter-sub-optimum::-moz-meter-bar {
+  background: yellow;
+}
+
+.styledmeter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+  background: green;
+}
+
+.permission-name {
+    font-size: smaller;
+}
+.install {
+    background: #689f38;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: none;
+    border: none;
+    width: 70px;
+    height: 40px;
+    border-radius: 8px;
+    display: block;
+    float: left;
+    margin: 5px;
+}
+
+
+.install:hover {
+    background: #528a21;
+}
+</style>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <div class="default-page">
   <div class="header">
     <h1 id="main-title" class="container">
@@ -381,312 +444,33 @@ For more information, see:
     <a class="front-nav" href="/app-store">App Store</a>
     <a class="front-nav" href="/categories">Categories & Timelines</a>
   </div>
-
-  <div class="container timeline-container" style="display: none;">
-  <h3 class="graph_title" style="text-align:center; font-size: xx-large; font-weight: bold; margin: 20px;"></h3>
-    <div class="row toolbar-pf">
-      <div class="col-sm-12">
-        <form class="toolbar-pf-actions">
-          <div class="form-group">
-            <select class="selectpicker" id="timeline-selectpicker" data-live-search="true" multiple></select>
-          </div>
-          <div class="form-group">
-            <div class="dropdown pull-left">
-              <button class="btn btn-default dropdown-toggle" id="range-dropdown" data-toggle="dropdown" type="button">
-                <span data-bind="label">1 week</span>&nbsp;
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu zoom-filter" role="menu" aria-labelledby="dropdownMenu1">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">1 hour</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">1 day</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">1 week</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">1 month</a></li>
-              </ul>
-            </div>
-            <div class="dropdown pull-left">
-              <button class="btn btn-default dropdown-toggle" id="position-dropdown" data-toggle="dropdown" type="button">
-                <span data-bind="label">ending</span>&nbsp;
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu zoom-filter" role="menu" aria-labelledby="dropdownMenu2">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">centered on</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">starting</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">ending</a></li>
-              </ul>
-            </div>
-            <div class="input-group date" id="datepicker">
-              <input type="text" class="form-control bootstrap-datepicker"><span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-            </div>
-          </div>
-          <div class="form-group">
-            <button class="btn btn-default" id="reset-button" type="button">Reset Zoom</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="row">
-      <div id="pf-timeline"></div>
-    </div>
-    <br/>
-    <div id="legend"></div>
-  </div>
-
   <div class="main container clearfix" style="text-align: center;">
-    <div id="apps_container" style="width: 100%">
-    <h1 style="font-size: 60px; margin-bottom: 10px; margin-top: 20px;">App Categories</h1>
+    <div class="cat-sidebar">
+        <% categories.forEach( function(category){ %>
+            <li>
+            <%= category %>
+            </li>
+        <% }) %>
     </div>
-    <div id="games_container" style="width: 100%">
-    
-    <div id="device_container" style="width: 100%">
-    <h1 style="font-size: 60px; margin-bottom: 10px; margin-top: 20px;">Device List</h1>
-    </div>
-
-    </div>
-    <div id="permission_container" style="width: 100%">
-    <h1 style="font-size: 60px; margin-bottom: 10px; margin-top: 20px;">Permissions List</h1>
-    </div>
-
-    <div class="loading">
-      <h2>Loading...</h2>
+    <div class="app-listings">
+        <% appData.forEach( function(app){ %>
+            <div class="app-single">
+            <img src="<%= app.app_icon %>">
+            <h4><%= app.app_name %></h4>
+            <span><b>Category:</b> <%= app.app_genre %></span>
+            <span><b>Permission Usage</b></span>            
+            <span class="permission-name"><%- app.permissions.split(",").join("<br>") %></span>
+            <span><b>Risk Point</b></span>
+            <meter class="styledmeter" min="0" max="34" low="10" high="20" optimum="28" value="<%= app.points %>"></meter>
+            <a href="https://play.google.com/store/apps/details?id=<%= app.package_name%>" target="_blank">
+            <button class="install">Install</button>
+            </a>
+            </div>
+        <% }) %>
     </div>
   </div>
 </div>
 
-<script src="/custom/jquery-2.1.4.min.js"></script>
-<script src="/custom/bootstrap.min.js"></script>
-<script src="/custom/bootstrap-select.min.js"></script>
-<script src="/custom/bootstrap-datepicker.min.js"></script>
-<script src="/custom/d3.min.js"></script>
-<script src="/custom/c3.min.js"></script>
-<script src="/custom/timeline.js"></script>
-<script src="/custom/patternfly.min.js"></script>
-
-<!-- external file containing json object for data -->
-
-<script src="/custom/script.js"></script>
 <script type="text/javascript">
-  var appData = {};
-  var categories = {};
-  var totalData = 0;
-  document.querySelector(".loading").style.display = "block";
-  if(window.location.search){
-   var url = "/package-names?deviceId=" + window.location.search.split("=")[1];
-  } else {
-    var url = "/package-names"
-  }
-  fetch(url,{method: "get"}).then(function(response) {
-    return response.json();
-  }).then(function(res){
-    appData = res;
-    totalData = appData.packageList.length;
-    res.packageList.forEach(function(package){
-
-      if(localStorage.getItem(package)){
-        var pkgObj = JSON.parse(localStorage.getItem(package));
-
-          var appName = pkgObj.name;
-          var appCat = pkgObj.category;
-          var appType = pkgObj.type;
-          
-          categories[package] = {
-            name: appName,
-            category: appCat,
-            type: appType
-          }
-          
-          if(totalData == Object.keys(categories).length){
-            document.querySelector(".loading").style.display = "none";
-          }
-
-          var apps_container = document.querySelector("#apps_container");
-          var games_container = document.querySelector("#games_container");
-          
-          var li = document.createElement("li");
-          li.dataset.package = package;
-          li.textContent = appName;
-          li.addEventListener('click', function(){
-            document.querySelector('.graph_title').textContent = "Application: " + this.textContent;
-            loadJSON(this.dataset.package, "app");
-          });
-          if(appType == "App") {
-            
-            if(!apps_container.querySelector("ul." + appCat)){
-              var h5 = document.createElement('h5');
-              h5.textContent = appCat;
-              h5.addEventListener('click', function(){
-                var appList = [];
-                document.querySelector('.graph_title').textContent = "Category: " + this.textContent;
-                this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
-                loadJSON(appList.join("||"), "category");
-              });
-              var ul = document.createElement("ul");
-              ul.className = appCat;
-              ul.appendChild(h5);
-              ul.appendChild(li);
-              apps_container.appendChild(ul);
-            } else {
-              apps_container.querySelector("ul." + appCat).appendChild(li);
-            }
-
-          } else {
-
-            if(!games_container.querySelector("ul." + appCat)){
-              var h5 = document.createElement('h5');
-              h5.textContent = appCat;
-              h5.addEventListener('click', function(){
-                var appList = [];
-                document.querySelector('.graph_title').textContent = "Category: " + this.textContent;
-                this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
-                loadJSON(appList.join("||"), "category");
-              });
-              var ul = document.createElement("ul");
-              ul.className = appCat;
-              ul.appendChild(h5);
-              ul.appendChild(li);
-              games_container.appendChild(ul);
-            } else {
-              games_container.querySelector("ul." + appCat).appendChild(li);
-            }
-
-          }
-
-      } else {
-
-      fetch("/get-play?package=" + package,{method: "get"}).then(function(response) {
-        return response.text();
-      }).then(function(res){
-        if(res == "not found"){
-          categories[package] = {
-            name: package,
-            category: "Unknown",
-            type: "App"
-          }
-          localStorage.setItem(package, JSON.stringify(categories[package]));
-          if(totalData == Object.keys(categories).length){
-            document.querySelector(".loading").style.display = "none";
-          }
-          var apps_container = document.querySelector("#apps_container");
-          
-          var li = document.createElement("li");
-          li.dataset.package = package;
-          li.textContent = package;
-          li.addEventListener('click', function(){
-            document.querySelector('.graph_title').textContent = "Application: " + this.textContent;
-            loadJSON(this.dataset.package, "app");
-          });
-          if(!apps_container.querySelector("ul.Unknown")){
-            var h5 = document.createElement('h5');
-            h5.textContent = "Unknown";
-            h5.addEventListener('click', function(){
-            var appList = [];
-            document.querySelector('.graph_title').textContent = "Category: " + this.textContent;            
-            this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
-            loadJSON(appList.join("||"), "category");
-            });
-            var ul = document.createElement("ul");
-            ul.className = "Unknown";
-            ul.appendChild(h5);
-            ul.appendChild(li);
-            apps_container.appendChild(ul);
-
-          } else {
-            apps_container.querySelector("ul.Unknown").appendChild(li);
-          }
-
-        } else {
-          var res = JSON.parse(res);        
-          var appName = res.app_name;
-          var appCat = res.app_genre;
-          var appType = (res.app_type == "GAME") ? "Game" : "App";
-          categories[package] = {
-            name: appName,
-            category: appCat,
-            type: appType
-          }
-          localStorage.setItem(package, JSON.stringify(categories[package]));
-          if(totalData == Object.keys(categories).length){
-            document.querySelector(".loading").style.display = "none";
-          }
-
-          var apps_container = document.querySelector("#apps_container");
-          var games_container = document.querySelector("#games_container");
-          
-          var li = document.createElement("li");
-          li.dataset.package = package;
-          li.textContent = appName;
-          li.addEventListener('click', function(){
-            document.querySelector('.graph_title').textContent = "Application: " + this.textContent;
-            loadJSON(this.dataset.package, "app");
-          });
-          if(appType == "App") {
-            
-            if(!apps_container.querySelector("ul." + appCat)){
-              var h5 = document.createElement('h5');
-              h5.textContent = appCat;
-              h5.addEventListener('click', function(){
-                var appList = [];
-                document.querySelector('.graph_title').textContent = "Category: " + this.textContent;
-                this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
-                loadJSON(appList.join("||"), "category");
-              });
-              var ul = document.createElement("ul");
-              ul.className = appCat;
-              ul.appendChild(h5);
-              ul.appendChild(li);
-              apps_container.appendChild(ul);
-            } else {
-              apps_container.querySelector("ul." + appCat).appendChild(li);
-            }
-
-          } else {
-
-            if(!games_container.querySelector("ul." + appCat)){
-              var h5 = document.createElement('h5');
-              h5.textContent = appCat;
-              h5.addEventListener('click', function(){
-                var appList = [];
-                document.querySelector('.graph_title').textContent = "Category: " + this.textContent;
-                this.parentNode.querySelectorAll('li').forEach(el => appList.push(el.dataset.package));
-                loadJSON(appList.join("||"), "category");
-              });
-              var ul = document.createElement("ul");
-              ul.className = appCat;
-              ul.appendChild(h5);
-              ul.appendChild(li);
-              games_container.appendChild(ul);
-            } else {
-              games_container.querySelector("ul." + appCat).appendChild(li);
-            }
-
-          }
-          
-        }
-        
-      });
-
-    }
-    });
-    res.permissionList.forEach(function(perm){
-      var permLi = document.createElement('li');
-      permLi.className = "permission-list list-inline";
-      permLi.textContent = perm;
-      permLi.addEventListener('click', function(){
-        document.querySelector('.graph_title').textContent = "Permission: " + this.textContent;
-        loadJSON(perm, "permission");
-      });
-      document.querySelector("#permission_container").appendChild(permLi);
-    });
-
-    res.deviceList.forEach(function(device){
-      var devLi = document.createElement('li');
-      devLi.className = "permission-list list-inline";
-      devLi.textContent = device;
-      devLi.addEventListener('click', function(){
-       window.location.search = "?deviceId=" + device;
-      });
-      document.querySelector("#device_container").appendChild(devLi);
-    });
-
-  });
   
 </script>
