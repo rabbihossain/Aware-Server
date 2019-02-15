@@ -49,6 +49,7 @@ module.exports.security = {
   *                                                                           *
   ****************************************************************************/
 
-  csrf: false
-
+  csrf: false,
+  adminUserForLogin: "admin",
+  adminPassForLogin: "4W4R3P4SS"
 };

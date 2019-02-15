@@ -255,5 +255,25 @@ module.exports = {
         return res.send(data);
       }
     });
+  },
+  loginPage: function (req, res) {
+    if(req.session.isLoggedIn){
+      return res.redirect("/");
+    }
+    return res.view("pages/login");
+  },
+  loginAction: function (req, res) {
+    var username = sails.config.security.adminUserForLogin;
+    var password = sails.config.security.adminPassForLogin;
+    if(username == req.body.username && password == req.body.password){
+      req.session.isLoggedIn = true;
+      return res.redirect("/categories");
+    } else {
+      return res.send("Wrong username or password. Go back and try again.");
+    }
+  },
+  logout: function (req, res) {
+    req.session.isLoggedIn = false;
+    return res.redirect("/login");
   }
 };

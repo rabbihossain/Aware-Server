@@ -34,8 +34,10 @@ module.exports.routes = {
   'post /category-data': 'DataController.categoryData',
   'post /permission-data': 'DataController.permissionData',
   'get /sync-permission-data': 'DataController.syncPermissionData',
-  'get /app-store': 'DataController.appStore'
-
+  'get /app-store': 'DataController.appStore',
+  'get /login': 'DataController.loginPage',
+  'post /login': 'DataController.loginAction',
+  'get /logout': 'DataController.logout'
   /***************************************************************************
   *                                                                          *
   * More custom routes here...                                               *

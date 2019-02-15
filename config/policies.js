@@ -18,5 +18,16 @@ module.exports.policies = {
   ***************************************************************************/
 
   // '*': true,
-
+  DataController: {
+    allData: "isLoggedIn",
+    getPlay: "isLoggedIn",
+    home: "isLoggedIn",
+    appStore: "isLoggedIn",
+    categoryPage: "isLoggedIn",
+    appSingle:  "isLoggedIn",
+    categoryData: "isLoggedIn",
+    permissionData: "isLoggedIn",
+    packageList:  "isLoggedIn",
+    syncPermissionData: "isLoggedIn",
+  },
 };
