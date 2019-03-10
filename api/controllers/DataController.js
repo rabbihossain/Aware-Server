@@ -43,19 +43,19 @@ const permissionPoints = {
 }
 module.exports = {
   addData: function (req, res) {
-    var object = JSON.parse(req.body.data);
+    
     Data.findOrCreate({
-      'phone_id': object.PhoneID,
-      'package_name': object.Package,
-      'permission': object.Permission,
-      'timestamp': object.Timestamp,
-      "gps": object.GPS
+      'phone_id': req.body.PhoneID,
+      'package_name': req.body.Package,
+      'permission': req.body.Permission,
+      'timestamp': req.body.Timestamp,
+      "gps": req.body.GPS
     }, {
-      'phone_id': object.PhoneID,
-      'package_name': object.Package,
-      'permission': object.Permission,
-      'timestamp': object.Timestamp,
-      "gps": object.GPS
+      'phone_id': req.body.PhoneID,
+      'package_name': req.body.Package,
+      'permission': req.body.Permission,
+      'timestamp': req.body.Timestamp,
+      "gps": req.body.GPS
     }).exec(function (err, data) {
       if (err) {
         return res.status(500).send('error');
