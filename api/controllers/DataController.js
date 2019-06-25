@@ -119,22 +119,36 @@ module.exports = {
     res.redirect('/categories');
   },
 
-  appStore: function(req,res){
-
-    Package.find().exec(function(err, data){
+  appStore: async function(req,res){
+    if(req.query.search){
+      var filter = {
+        app_name: {"contains": req.query.search}
+      }
+    }
+    else if(req.query.category) {
+      var filter = {
+        app_genre: req.query.category
+      }
+    }  else {
+      var filter = {}
+    }
+    var catSQL = 'SELECT DISTINCT app_genre FROM package';
+    var rawData = await sails.sendNativeQuery(catSQL);
+    var catData = rawData["rows"].map(a => a.app_genre);
+    Package.find(filter).paginate(req.query.page ? req.query.page - 1 : 0 , 12).exec(function(err, data){
       if(err) {
         res.send(err);
       } else {
-        var categories = [];
-        data.forEach(function(app){
-          if(!categories.includes(app.app_genre)){
-            categories.push(app.app_genre);
+        return res.view("pages/appstore", {
+          categories: catData,
+          appData: data,
+          paginator: {
+            category: req.query.category ? req.query.category : false,
+            search: req.query.search ? req.query.search : false,
+            page: req.query.page ? req.query.page : 1
           }
         });
-        return res.view("pages/appstore", {
-          categories: categories,
-          appData: data
-        });
+        
       }
     });
   },

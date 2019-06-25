@@ -128,8 +128,7 @@ For more information, see:
   }
 
   .container {
-    width: 80%;
-    max-width: 1200px;
+    width: 100%;
     margin: auto;
   }
 
@@ -139,7 +138,7 @@ For more information, see:
     -o-transition: 6s;
     transition: 6s;
     background: rgba(4, 36, 41, 0.89) url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADWCAMAAACqsZ09AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpCMEZEOEZFNzU0NjUxMUUzQjM5MUNDMkQ1OUM3QjFFNSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpCMEZEOEZFODU0NjUxMUUzQjM5MUNDMkQ1OUM3QjFFNSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkEwMjI2NzMyNTQ2NTExRTNCMzkxQ0MyRDU5QzdCMUU1IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkIwRkQ4RkU2NTQ2NTExRTNCMzkxQ0MyRDU5QzdCMUU1Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+4o9nxwAAAMNQTFRFDmRxDmRx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') no-repeat 42% bottom;
-    padding: 100px 0 65px;
+    padding: 30px 0 40px;
   }
 
   .header h1#main-title {
@@ -164,6 +163,7 @@ For more information, see:
 
   div.main.container {
     padding: 50px 0;
+    background: #eeeeee;
   }
 
   h1 {
@@ -308,7 +308,7 @@ For more information, see:
   }
   .front-nav {
     font-size: 20px;
-    margin: 10px;
+    margin-left: 20px;
     color: #fff;
     font-weight: bold;
   }
@@ -318,7 +318,9 @@ For more information, see:
     float: left;
     width: 20%;
     text-align: center;
-}
+    background: #fff;
+    box-shadow: 1px 1px 3px -1px #101010;
+  }
 
 .app-listings {
     width: 78%;
@@ -328,14 +330,17 @@ For more information, see:
     text-align: center;
 }
 .app-single {
-    width: 32%;
+    width: 24%;
     overflow: hidden;
     float: left;
     display: inline;
     margin-left: 1%;
-    background: #efefef;
+    background: #fff;
     margin-bottom: 5px;
-    min-height: 650px; 
+    /* min-height: 325px; */
+    margin-top: 6px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px -1px #101010;
 }
 .app-single > img {
     width: 100px;
@@ -434,6 +439,45 @@ For more information, see:
 .install:hover {
     background: #528a21;
 }
+
+.category-item {
+    color: grey;
+    font-weight: 400;
+    text-decoration: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    transition: 0.4s ease-in-out all;
+}
+.category-item:hover {
+  background: #118798;
+  color: #fff;
+}
+a.paginate-prev {
+    background: #118798;
+    color: #fff;
+    padding: 10px;
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    width: 100px;
+    border-radius: 25px 0px 0px 25px;
+}
+a.paginate-next {
+    background: #118798;
+    color: #fff;
+    padding: 10px;
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    width: 100px;
+    border-radius: 0px 25px 25px 0px;
+}
+a.paginate-next:hover {
+  background: #0e6471;
+}
+a.paginate-prev:hover {
+  background: #0e6471;
+}
 </style>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <div class="default-page">
@@ -445,21 +489,27 @@ For more information, see:
     <a class="front-nav" href="/categories">Categories & Timelines</a>
   </div>
   <div class="main container clearfix" style="text-align: center;">
+    <form class="search-form" action="/app-store" method="GET" style="display: block; text-align: center; margin-bottom: 40px;">
+      <input type="search" name="search" style="display: inline;height: 38px;background: #fff;border: 1px solid #9d9494;padding: 10px;border-radius: 8px;width: 30%;" placeholder="Search for apps"/>
+      <button type="submit" class="install" style="    display: inline;float: none;">Search</button>
+    </form>
     <div class="cat-sidebar">
         <% categories.forEach( function(category){ %>
-            <li>
-            <%= category %>
-            </li>
+            <a style="text-decoration: none;"href="/app-store?category=<%= category %>">
+              <li class="category-item">
+                <%= category %>
+              </li>
+            </a>
         <% }) %>
     </div>
     <div class="app-listings">
         <% appData.forEach( function(app){ %>
             <div class="app-single">
             <img src="<%= app.app_icon %>">
-            <h4><%= app.app_name %></h4>
-            <span><b>Category:</b> <%= app.app_genre %></span>
-            <span><b>Permission Usage</b></span>            
-            <span class="permission-name"><%- app.permissions.split(",").join("<br>") %></span>
+            <h4 style="height: 40px"><%= app.app_name %></h4>
+            <a style="display: block; text-align: left; margin-left: 3px;" href="/app-store?category=<%= app.app_genre %>"><%= app.app_genre %></a>
+            <!-- <span><b>Permission Usage</b></span>             -->
+            <!-- <span class="permission-name"><%- app.permissions.split(",").join("<br>") %></span> -->
             <span><b>Risk Point</b></span>
             <meter class="styledmeter" min="0" max="34" low="10" high="20" optimum="28" value="<%= app.points %>"></meter>
             <a href="https://play.google.com/store/apps/details?id=<%= app.package_name%>" target="_blank">
@@ -467,6 +517,35 @@ For more information, see:
             </a>
             </div>
         <% }) %>
+        <div class="paginate-container">
+          <% if(paginator.search) { %>
+            
+            <% if( paginator.page != 1 ) { %>
+              <a class="paginate-prev" href="/app-store?search=<%= paginator.search %>&page=<%= parseInt(paginator.page) - 1 %>"> < Back</a>
+            <% } %>
+            <% if( appData.length == 12 ) { %>
+              <a class="paginate-next" href="/app-store?search=<%= paginator.search %>&page=<%= parseInt(paginator.page) + 1 %>">Next > </a>
+            <% } %>
+
+          <% } else if(paginator.category) { %>
+            
+            <% if( paginator.page != 1 ) { %>
+              <a class="paginate-prev" href="/app-store?category=<%= paginator.category %>&page=<%= parseInt(paginator.page) - 1 %>"> < Back</a>
+            <% } %>
+            <% if( appData.length == 12 ) { %>
+              <a class="paginate-next" href="/app-store?category=<%= paginator.category %>&page=<%= parseInt(paginator.page) + 1 %>">Next > </a>
+            <% } %>
+
+          <% } else { %>
+            <% if( paginator.page != 1 ) { %>
+              <a class="paginate-prev" href="/app-store?page=<%= parseInt(paginator.page) - 1 %>"> < Back</a>
+            <% } %>
+            <% if( appData.length == 12 ) { %>
+              <a class="paginate-next" href="/app-store?page=<%= parseInt(paginator.page) + 1 %>">Next > </a>
+            <% } %>
+          
+          <% } %>
+        </div> 
     </div>
   </div>
 </div>
