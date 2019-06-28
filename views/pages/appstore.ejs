@@ -330,23 +330,49 @@ For more information, see:
     text-align: center;
 }
 .app-single {
-    width: 24%;
+    width: 170px;
     overflow: hidden;
     float: left;
     display: inline;
-    margin-left: 1%;
     background: #fff;
     margin-bottom: 5px;
-    /* min-height: 325px; */
-    margin-top: 6px;
-    border-radius: 5px;
-    box-shadow: 1px 1px 3px -1px #101010;
+    margin-top: 15px;
+    box-shadow: 1px 1px 3px -1px #706e6e;
+    margin-left: 15px;
+    text-align: center;
 }
-.app-single > img {
-    width: 100px;
-    margin: 5px;
+
+.app-name {
+  text-overflow: ellipsis;
+  font-weight: 400;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.image-container {
+  width: 100%;
+  padding: 10px;
+  position: relative;
+  display: block;
+}
+
+.image-overlay {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: 0.3s ease all;
+}
+.image-container:hover > .image-overlay {
+  background: #00000078;
+}
+.image-container > img {
+    width: 100%;
     display: block;
 }
+
 
 .app-single > h4 {
     font-weight: bold;
@@ -424,15 +450,14 @@ For more information, see:
 .install {
     background: #689f38;
     color: #fff;
-    font-weight: bold;
     box-shadow: none;
     border: none;
     width: 70px;
-    height: 40px;
+    height: 30px;
     border-radius: 8px;
     display: block;
-    float: left;
-    margin: 5px;
+    float: right;
+    margin: 10px 5px;
 }
 
 
@@ -451,6 +476,12 @@ For more information, see:
 .category-item:hover {
   background: #118798;
   color: #fff;
+}
+.paginate-container {
+  width: 100%;
+  position: relative;
+  display: block;
+  overflow: auto;
 }
 a.paginate-prev {
     background: #118798;
@@ -478,6 +509,78 @@ a.paginate-next:hover {
 a.paginate-prev:hover {
   background: #0e6471;
 }
+
+.risk-safe {
+    width: 80px;
+    height: 30px;
+    border-radius: 20px;
+    margin: 5px;
+    float: left;
+    margin-top: 10px;
+    background: #55e641;
+    font-size: 12px;
+    line-height: 30px;
+    font-weight: bold;
+    color: #575757;
+}
+
+.risk-less-safe {
+    width: 80px;
+    height: 30px;
+    border-radius: 20px;
+    margin: 5px;
+    float: left;
+    margin-top: 10px;
+    background: #aedc7c;
+    font-size: 12px;
+    line-height: 30px;
+    font-weight: bold;
+    color: #575757;
+}
+
+.risk-moderate {
+    width: 80px;
+    height: 30px;
+    border-radius: 20px;
+    margin: 5px;
+    float: left;
+    margin-top: 10px;
+    background: #fbdc74;
+    font-size: 12px;
+    line-height: 30px;
+    font-weight: bold;
+    color: #575757;
+}
+
+.risk-less-danger {
+    width: 80px;
+    height: 30px;
+    border-radius: 20px;
+    margin: 5px;
+    float: left;
+    margin-top: 10px;
+    background:#fc9a52;
+    font-size: 12px;
+    line-height: 30px;
+    font-weight: bold;
+    color: #575757;
+}
+
+.risk-danger {
+    width: 80px;
+    height: 30px;
+    border-radius: 20px;
+    margin: 5px;
+    float: left;
+    margin-top: 10px;
+    background: #f93838;
+    font-size: 12px;
+    line-height: 30px;
+    font-weight: bold;
+    color: #575757;
+}
+
+
 </style>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <div class="default-page">
@@ -505,13 +608,27 @@ a.paginate-prev:hover {
     <div class="app-listings">
         <% appData.forEach( function(app){ %>
             <div class="app-single">
-            <img src="<%= app.app_icon %>">
-            <h4 style="height: 40px"><%= app.app_name %></h4>
-            <a style="display: block; text-align: left; margin-left: 3px;" href="/app-store?category=<%= app.app_genre %>"><%= app.app_genre %></a>
+            <div class="image-container">
+              <div class="image-overlay"></div>
+              <img src="<%= app.app_icon %>">
+            </div>
+            <span class="app-name"><%= app.app_name %></span>
+            <a style="display: block; text-align: left; margin-left: 5px; color: grey;margin-top: -10px;font-size: 15px;" href="/app-store?category=<%= app.app_genre %>"><%= app.app_genre %></a>
             <!-- <span><b>Permission Usage</b></span>             -->
             <!-- <span class="permission-name"><%- app.permissions.split(",").join("<br>") %></span> -->
-            <span><b>Risk Point</b></span>
-            <meter class="styledmeter" min="0" max="34" low="10" high="20" optimum="28" value="<%= app.points %>"></meter>
+            <!-- <span><b>Risk Point</b></span> -->
+            <!-- <meter class="styledmeter" min="0" max="34" low="10" high="20" optimum="28" value="<%= app.points %>"></meter> -->
+            <% if(app.points < 8) { %>
+              <div class="risk-safe">Sehr Sicher</div>
+            <% } else if(app.points < 15) { %>
+              <div class="risk-less-safe">Sicher</div>
+            <% } else if(app.points < 22) { %>
+              <div class="risk-moderate">Moderat</div>            
+            <% }else if(app.points < 28) { %>
+              <div class="risk-less-danger">Kritisch</div>
+            <% } else { %>
+              <div class="risk-danger">Sehr Kritisch</div>            
+            <% } %>
             <a href="https://play.google.com/store/apps/details?id=<%= app.package_name%>" target="_blank">
             <button class="install">Install</button>
             </a>
