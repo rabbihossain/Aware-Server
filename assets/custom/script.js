@@ -111,7 +111,7 @@ function loadJSON(name, type) {
 
 function loadTimeLine(){
 
-  TLDates = json.map(a => a.data.map(a => a.date)).join().split(",").map(a => Date.parse(a)).sort().map(a => new Date(a));
+  TLDates = json.map(a => a.data.map(a => Date.parse(a.date))).join().split(",").sort().map(a => new Date(parseInt(a)));
   TLStart = TLDates[0];
   TLEnd = TLDates[TLDates.length - 1];
 
