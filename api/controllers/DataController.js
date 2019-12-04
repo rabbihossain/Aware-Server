@@ -43,7 +43,7 @@ const permissionPoints = {
 }
 module.exports = {
   addData: function (req, res) {
-    parsedTimestamp = new Date(req.body.Timestamp).toLocaleString();
+    parsedTimestamp = new Date(req.body.Timestamp).toUTCString();
     Data.findOrCreate({
       'phone_id': req.body.PhoneID,
       'package_name': req.body.Package,
