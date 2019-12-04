@@ -43,18 +43,17 @@ const permissionPoints = {
 }
 module.exports = {
   addData: function (req, res) {
-    parsedTimestamp = new Date(req.body.Timestamp).toUTCString();
     Data.findOrCreate({
       'phone_id': req.body.PhoneID,
       'package_name': req.body.Package,
       'permission': req.body.Permission,
-      'timestamp': parsedTimestamp,
+      'timestamp': req.body.Timestamp,
       "gps": req.body.GPS
     }, {
       'phone_id': req.body.PhoneID,
       'package_name': req.body.Package,
       'permission': req.body.Permission,
-      'timestamp': parsedTimestamp,
+      'timestamp': req.body.Timestamp,
       "gps": req.body.GPS
     }).exec(function (err, data) {
       if (err) {
